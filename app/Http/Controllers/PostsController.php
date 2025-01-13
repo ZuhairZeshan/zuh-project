@@ -19,52 +19,51 @@ class PostsController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string|max:255',
+        ]);
+
+        Post::create($validated);
+
+        return redirect('/posts')->with('success', 'Post added successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $post=Post::find($id);
         return view('posts.show', compact('post'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+    public function edit($id){
+        $post=Post::find($id);
+        return view('posts.edit', compact('post'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
+        $post = Post::findOrFail($id); // Find the post by ID
+        $post->title = $request->input('title'); // Update title
+        $post->body = $request->input('body'); // Update content
+        $post->save(); // Save changes to the database
+
+        return redirect()->route('posts')->with('success', 'Post updated successfully!');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $post = Post::findOrFail($id); // Find the post by ID or return 404
+        $post->delete();
+
+        return redirect()->route('posts')->with('success', 'Post deleted successfully!');
     }
 }
