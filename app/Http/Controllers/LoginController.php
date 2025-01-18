@@ -24,7 +24,7 @@ public function login(Request $request)
     
     if (Auth::attempt($credentials)) {
         // Authentication passed
-        return redirect()->intended('dashboard'); // Redirect to dashboard after successful login
+        return redirect()->intended('posts'); // Redirect to dashboard after successful login
     }
 
     // Authentication failed

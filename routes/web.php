@@ -62,3 +62,7 @@ Route::post('register', [RegisterController::class, 'register']);
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -30,8 +30,12 @@ class PostsController extends Controller
             'title' => 'required|string|max:255',
             'body' => 'required|string|max:255',
         ]);
+        $post = new Post();
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->user_id = auth()->id();
+        $post->save();
 
-        Post::create($validated);
 
         return redirect('/posts')->with('success', 'Post added successfully!');
     }
@@ -57,7 +61,7 @@ class PostsController extends Controller
         $post->body = $request->input('body'); // Update content
         $post->save(); // Save changes to the database
 
-        return redirect()->route('posts')->with('success', 'Post updated successfully!');
+        return redirect()->route('dashboard')->with('success', 'Post updated successfully!');
     }
     public function destroy($id)
     {
